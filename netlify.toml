@@ -1,0 +1,7 @@
+[settings]
+  ID = "porter-operator"
+
+[build]
+  base = "/"
+  publish = "docs/public"
+  command = "go run mage.go -v docs:deploy"

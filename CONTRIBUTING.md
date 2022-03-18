@@ -4,9 +4,10 @@
 * [New Contributor Guide](#new-contributor-guide)
 * [Developer Tasks](#developer-tasks)
   * [Initial setup](#initial-setup)
-  * [Makefile explained](#makefile-explained)
-  * [Run a test installation](#run-a-test-installation)  
+  * [Magefile explained](#magefile-explained)
   * [Modify the porter agent](#modify-the-porter-agent)
+  * [Run a test installation](#run-a-test-installation)  
+  * [Connect to the in-cluster mongo database](#connect-to-the-in-cluster-mongo-database)
   * [Publish to another registry](#publish-to-another-registry)
 ---
 
@@ -88,7 +89,6 @@ export PORTER_AGENT_VERSION=canary-dev
 mage SetupNamespace test
 ```
 
-
 ## Run a test installation
 
 There are sample installation CRDs in [config/samples](/config/samples) that you can quickly try out with:
@@ -107,7 +107,6 @@ Otherwise, the retry annotation on the installation to force the operator to ree
 ```
 mage bump porter-hello
 ```
-
 
 ## Connect to the in-cluster mongo database
 
@@ -148,6 +147,9 @@ kubectl get pods -n test --wait
 # Now you can see the result in porter!
 porter logs hello -n operator
 ```
+
+You can also use this to work-around the operator's lack of support for creating credential and parameter sets.
+After you have configured the porter cli to connect to the in-cluster mongodb, use the porter cli to save credential and parameter sets before applying an installation resource to the cluster.
 
 ## Publish to Another Registry
 

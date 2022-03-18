@@ -18,6 +18,7 @@ import (
 
 	. "get.porter.sh/operator/mage"
 	"get.porter.sh/operator/mage/docker"
+	"get.porter.sh/operator/mage/docs"
 	. "get.porter.sh/porter/mage/docker"
 	"get.porter.sh/porter/mage/releases"
 	"get.porter.sh/porter/pkg/cnab"
@@ -274,6 +275,11 @@ func EnsureDeployed() {
 	if !isDeployed() {
 		Deploy()
 	}
+}
+
+// Deploy the website
+func Docs() error {
+	return docs.Deploy()
 }
 
 // Build the operator and deploy it to the test cluster using

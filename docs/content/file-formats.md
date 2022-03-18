@@ -16,7 +16,8 @@ The same goes for the name and labels fields.
 
 ## Installation
 
-The Installation CRD represents an installation of a bundle in Porter.
+See the glossary for more information about the [Installation] resource.
+The Installation ressource represents an installation of a bundle in Porter.
 The Installation CRD spec is a superset of the Installation resource in Porter, so it is safe to copy/paste the output of
 the `porter installation show NAME -o yaml` command into the spec field and have that be a valid installation.
 
@@ -30,8 +31,20 @@ the following fields are supported:
 
 ## Agent Action
 
-The AgentAction CRD represents running a Porter command with the [Porter Agent](https://release-v1.porter.sh/operator/#porter-agent).
-The operator uses this resource internally to run `porter installation apply` when an Installation resource is changed and you may use it to execute arbitrary commands as well, such as executing a custom action on an installation.
+See the glossary for more information about the [Agent Action] resource.
+
+```yaml
+apiVersion: porter.sh/v1
+kind: AgentAction
+metadata:
+  name: agentaction-sample
+spec:
+  args: ["installation", "apply", "installation.yaml"]
+  files:
+    # base64 encoded file contents
+    installation.yaml: c2NoZW1hVmVyc2lvbjogMS4wLjAKbmFtZXNwYWNlOiBvcGVyYXRvcgpuYW1lOiBoZWxsbwpidW5kbGU6CiAgcmVwb3NpdG9yeTogZ2hjci5pby9nZXRwb3J0ZXIvdGVzdC9wb3J0ZXItaGVsbG8KICB2ZXJzaW9uOiAwLjIuMApwYXJhbWV0ZXJzOgogIG5hbWU6IGxsYW1hcyAK
+
+```
 
 | Field        | Required | Default                                | Description                                                                             |
 |--------------|----------|----------------------------------------|-----------------------------------------------------------------------------------------|
@@ -45,16 +58,11 @@ The operator uses this resource internally to run `porter installation apply` wh
 | volumeMounts | false    | Porter's config and working directory. | Additional volumes that should be mounted into the Porter Agent.                        |
 | volumes      | false    | Porter's config and working directory. | Additional volumes that should be mounted into the Porter Agent.                        |                
 
+[Agent Action]: /operator/glossary/#agent-action
+
 ## Agent Config
 
-The Porter Agent is a Kubernetes job that executes the porter CLI when an [installation resource](#installation) is modified.
-The agent is a Docker image with the porter CLI installed, and a custom entry point to assist with applying the Porter [configuration file].
-
-The AgentConfig CRD represents the configuration that the operator should use when executing Porter on Kubernetes, which is known as the Porter agent.
-
-A default AgentConfig is generated for you by the **configureNamespace** custom action of the porter-operator bundle.
-You can change the configuration for running Porter by creating an AgentConfig resource and overriding relevant fields.
-Depending on the desired scope of that configuration either reference that AgentConfig directly on the installation or name the AgentConfig default and define it in the installation namespace or the porter-operator-system namespace.
+See the glossary for more information about the [Agent Config] resource.
 
 ```yaml
 apiVersion: porter.sh/v1
@@ -70,14 +78,6 @@ spec:
   installationServiceAccount: installation-agent
 ```
 
-Configuration is hierarchical and has the following precedence:
-
-* AgentConfig referenced on the Installation overrides everything else.
-* AgentConfig defined in the Installation namespace with the name "default".
-* AgentConfig defined in the Porter Operator namespace with the name "default".
-
-Values are merged from all resolved AgentConfig resources, so that you can define a base set of defaults and selectively override them within a namespace or for a particular installation.
-
 | Field        | Required    | Default | Description |
 | -----------  | ----------- | ------- | ----------- |
 | porterRepository  | false  | ghcr.io/getporter/porter-agent | The repository for the Porter Agent image. |
@@ -87,6 +87,8 @@ Values are merged from all resolved AgentConfig resources, so that you can defin
 | volumeSize | false | 64Mi | The size of the persistent volume that Porter will request when running the Porter Agent. It is used to share data between the Porter Agent and the bundle invocation image. It must be large enough to store any files used by the bundle including credentials, parameters and outputs. |
 | pullPolicy | false | PullAlways when the tag is canary or latest, otherwise PullIfNotPresent. | Specifies when to pull the Porter Agent image |
 
+[Agent Config]: /operator/glossary/#agent-config
+
 ### Service Account
 
 The only required configuration is the name of the service account under which Porter should run.
@@ -94,16 +96,7 @@ The configureNamespace action of the porter operator bundle creates a service ac
 
 ## Porter Config
 
-The PorterConfig CRD represents the porter configuration file that should be used by the Porter Agent.
-On a local installation of Porter, this file can be found in PORTER_HOME/config.json|toml|yaml, usually ~/.porter/config.toml.
-By default, Porter uses the mongodb server deployed with the Operator.
-Since the mongodb server is not secured with a password, and is accessible to the cluster, this is not suitable for production use.
-
-🔒 We don't yet support referencing external secrets from the configuration file, so be careful if you embed a real connection string in this file!
-
-A default PorterConfig is generated for you by the **configureNamespace** custom action of the porter-operator bundle.
-You can the configuration of the porter CLI by creating a PorterConfig resource and overriding relevant fields.
-Depending on the desired scope of that configuration either reference that PorterConfig directly on the installation or name the PorterConfig default and define it in the installation namespace or the porter-operator-system namespace.
+See the glossary for more information about the [Porter Config] resource.
 
 ```yaml
 apiVersion: porter.sh/v1
@@ -123,14 +116,6 @@ spec:
 
 ```
 
-Configuration is hierarchical and has the following precedence:
-
-* PorterConfig referenced on the Installation overrides everything else.
-* PorterConfig defined in the Installation namespace with the name "default".
-* PorterConfig defined in the Porter Operator namespace with the name "default".
-
-Values are merged from all resolved PorterConfig resources, so that you can define a base set of defaults and selectively override them within a namespace or for a particular installation.
-
 | Field        | Required    | Default | Description |
 | -----------  | ----------- | ------- | ----------- |
 | debug        | false       | false   | Specifies if Porter should output debug logs. |
@@ -143,6 +128,8 @@ Values are merged from all resolved PorterConfig resources, so that you can defi
 | defaultSecretsPlugin | false | kubernetes.secrets | The name of the storage plugin to use when defaultSecrets is unspecified. |
 | storage | false | The mongodb server installed with the operator. | A list of named storage configurations. |
 | secrets | false | (empty) | A list of named secrets configurations. |
+
+[Porter Config]: /operator/glossary/#porter-config
 
 [Porter Feature Flags]: /configuration/#experimental-feature-flags
 [configuration file](/configuration/)
