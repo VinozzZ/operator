@@ -86,17 +86,17 @@ This bundle uses the following tools: exec, helm3, kubernetes.
 
 To install this bundle run the following command, passing --param KEY=VALUE for any parameters you want to customize:
 porter credentials generate mycreds --reference ghcr.io/getporter/porter-operator:v0.5.0
-porter install --reference ghcr.io/getporter/porter-operator:v0.5.0 --cred mycreds
+porter install --reference ghcr.io/getporter/porter-operator:v0.5.1 --cred mycreds
 ```
 
 Generate a credential set for the bundle, the only required credential for the operator is a kubeconfig for the cluster that the operator is to be installed in.
 ```
-porter credentials generate porterops -r ghcr.io/getporter/porter-operator:v0.4.0
+porter credentials generate porterops -r ghcr.io/getporter/porter-operator:v0.5.1
 ```
 
 Install the operator into the porter-operator-system namespace:
 ```
-porter install porterops -c porterops -r ghcr.io/getporter/porter-operator:v0.4.0
+porter install porterops -c porterops -r ghcr.io/getporter/porter-operator:v0.5.1
 ```
 
 Create a namespace with the appropriate RBAC and configuration. This namespace is where you will create installation CRDs and the operator will create corresponding Jobs to execute the porter CLI.
