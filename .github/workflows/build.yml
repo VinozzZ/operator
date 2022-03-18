@@ -46,6 +46,6 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Publish
         if: ${{ github.event_name != 'pull_request' }}
-        run: mage -v Publish
+        run: mage -v Publish Docs
         env:
           PORTER_ENV: production
